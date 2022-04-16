@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Number Trivia</string>
+    <string name="chip_trivia">Trivia</string>
+    <string name="chip_math">Math</string>
+    <string name="insert_number">Insert any number …</string>
+    <string name="generate">Generate!</string>
+    <string name="copy">Copy to Clipboard</string>
 </resources>
