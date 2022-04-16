@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.natashaval.numbertrivia.R
 import com.natashaval.numbertrivia.databinding.FragmentNumberBinding
@@ -34,11 +35,17 @@ class NumberFragment : Fragment() {
   }
 
   private fun observeNumberTrivia() {
-    viewModel.trivia.observe(viewLifecycleOwner) {
+    viewModel.trivia.observe(viewLifecycleOwner) { tr ->
       binding.lNumber.apply {
-        val (number, desc) = it.separateNumber()
+        val (number, desc) = tr.separateNumber()
         btNumber.text = number
         tvDesc.text = desc
+        btNumber.setOnClickListener {
+          val action = NumberFragmentDirections.actionNumberFragmentToDetailFragment(
+            trivia = tr,
+            number = number.toInt())
+          findNavController().navigate(action)
+        }
       }
     }
   }
