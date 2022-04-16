@@ -20,9 +20,10 @@ class NumberViewModel @Inject constructor(
     getNumber(number = "random", type = "trivia")
   }
 
-  fun getNumber(number: String?, type: String?) {
+  fun getNumber(number: String, type: String?) {
     viewModelScope.launch {
-      val result = repository.getNumber(number, type)
+      val checkNumber = number.ifBlank { "random" }
+      val result = repository.getNumber(checkNumber, type)
       _trivia.postValue(result)
     }
   }

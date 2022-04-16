@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import com.google.android.material.chip.Chip
 import com.natashaval.numbertrivia.R
 import com.natashaval.numbertrivia.databinding.FragmentNumberBinding
 import com.natashaval.numbertrivia.viewmodel.NumberViewModel
@@ -29,6 +30,7 @@ class NumberFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     observeNumberTrivia()
+    generateNewTrivia()
   }
 
   private fun observeNumberTrivia() {
@@ -37,6 +39,16 @@ class NumberFragment : Fragment() {
         val (number, desc) = it.separateNumber()
         btNumber.text = number
         tvDesc.text = desc
+      }
+    }
+  }
+
+  private fun generateNewTrivia() {
+    with(binding.lSelection) {
+      btGenerate.setOnClickListener {
+        val type = cgChip.findViewById<Chip>(cgChip.checkedChipId).text.toString().lowercase()
+        val number = inputNumber.text.toString()
+        viewModel.getNumber(number, type)
       }
     }
   }
