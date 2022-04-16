@@ -6,6 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -16,7 +17,10 @@ object NetworkModule {
   @Singleton
   @Provides
   fun provideRetrofit(): Retrofit {
-    return Retrofit.Builder().baseUrl(BASE_URL).build()
+    return Retrofit.Builder()
+      .addConverterFactory(ScalarsConverterFactory.create())
+      .baseUrl(BASE_URL)
+      .build()
   }
 
   @Singleton

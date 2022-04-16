@@ -6,13 +6,17 @@
     android:layout_height="wrap_content"
     android:padding="8dp">
 
-    <TextView
-        android:id="@+id/tv_number"
-        style="@style/TextAppearance.MaterialComponents.Headline2"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/bt_number"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="42dp"
+        android:textSize="60sp"
+        android:textColor="@color/primary_light"
         app:layout_constraintBottom_toTopOf="@id/tv_desc"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/iv_favorite"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="42" />
@@ -27,7 +31,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_number"
+        app:layout_constraintTop_toBottomOf="@id/bt_number"
         tools:text="is the answer to the Ultimate Question of Life, the Universe, and Everything." />
 
     <ImageView
@@ -36,11 +40,9 @@
         android:layout_height="36dp"
         android:layout_marginEnd="16dp"
         android:contentDescription="@string/add_to_favorite"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/tv_number"
+        app:layout_constraintBottom_toBottomOf="@id/bt_number"
         app:layout_constraintEnd_toEndOf="@id/tv_desc"
-        app:layout_constraintTop_toTopOf="@id/tv_number"
-        app:srcCompat="@drawable/ic_favorite_outlined"
-        tools:visibility="visible" />
+        app:layout_constraintTop_toTopOf="@id/bt_number"
+        app:srcCompat="@drawable/ic_favorite_outlined" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.natashaval.numbertrivia.R
 import com.natashaval.numbertrivia.databinding.FragmentFavoriteBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FavoriteFragment : Fragment() {
 
   private var _binding: FragmentFavoriteBinding? = null
