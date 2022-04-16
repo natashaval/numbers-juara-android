@@ -5,4 +5,5 @@
     <string name="insert_number">Insert any number …</string>
     <string name="generate">Generate!</string>
     <string name="copy">Copy to Clipboard</string>
+    <string name="add_to_favorite">Add to Favorite</string>
 </resources>
