@@ -12,6 +12,7 @@ View the demo here: [Youtube](https://youtu.be/HploO0biq48)
 
 ## Overview
 - Number Trivia is a simple Android application to show an interesting fact about numbers. The trivia is taken from NumbersApi.  
+- Make sure the phone is connected to Internet to retrieve from the API  
 ![Number Fragment](screenshots/number_fragment_0.png)
 - On opening the app, it shows fun fact from a random number
 ![Number Fragment Filled](screenshots/number_fragment.png)
@@ -36,6 +37,17 @@ View the demo here: [Youtube](https://youtu.be/HploO0biq48)
 5. Android Hilt dependency injection
 6. Recycler View List Adapter
 7. Implicit Intent
+
+### Challenges
+I faced a challenge to synchronize the fact retrieved from API and the fact fetched from the database.  
+This issue is to decide the drawable for favorite icon (filled / outlined).  
+The implementations that I applied when user clicks on the favorite icon:
+1. Fetch the fact from the API
+2. Retrieve the fact based on a specific number from database
+3. Compare whether the fact already available or not in database
+    - If the fact is not yet available in the database, insert the fact to database
+    - If the fact is already available in the database, update the boolean is_favorite in database
+4. Update the UI
 
 ## Credits
 Credits to [Numbers API](http://numbersapi.com/) for providing the API  
