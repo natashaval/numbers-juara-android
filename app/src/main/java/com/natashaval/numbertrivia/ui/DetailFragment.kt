@@ -11,9 +11,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.natashaval.numbertrivia.R
 import com.natashaval.numbertrivia.databinding.FragmentDetailBinding
+import com.natashaval.numbertrivia.model.NumberData
+import com.natashaval.numbertrivia.viewmodel.NumberViewModel
 import com.natashaval.numbertrivia.viewmodel.separateNumber
 
 class DetailFragment : Fragment() {
@@ -22,7 +25,9 @@ class DetailFragment : Fragment() {
   private val binding get() = _binding!!
 
   private val navigationArgs: DetailFragmentArgs by navArgs()
-  private val trivia by lazy { navigationArgs.trivia }
+  private val trivia by lazy { navigationArgs.trivia ?: "" }
+  private val number by lazy { navigationArgs.number ?: "random" }
+  private val viewModel: NumberViewModel by activityViewModels()
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -33,20 +38,25 @@ class DetailFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    trivia?.let {
-      bind(it)
-      copyToClipboard(it)
-      composeEmail(it)
+    viewModel.getNumberData(number).observe(viewLifecycleOwner) { numberData ->
+      val data = if (null != numberData) {
+        numberData
+      } else {
+        val (num, desc) = trivia.separateNumber()
+        NumberData(number = num, description = desc, isFavorite = false)
+      }
+      bind(data)
+      copyToClipboard(data.getTrivia())
+      composeEmail(data.getTrivia())
     }
   }
 
-  private fun bind(trivia: String) {
+  private fun bind(numberData: NumberData) {
     binding.lNumber.apply {
       btNumber.isClickable = false
-      ivFavorite.visibility = View.GONE
-      val (number, desc) = trivia.separateNumber()
-      btNumber.text = number
-      tvDesc.text = desc
+      btNumber.text = numberData.number
+      tvDesc.text = numberData.description
+      setImageFavorite(numberData.isFavorite)
     }
   }
 
@@ -69,6 +79,13 @@ class DetailFragment : Fragment() {
       if (activity?.packageManager?.resolveActivity(intent, 0) != null) {
         startActivity(intent)
       }
+    }
+  }
+
+  private fun setImageFavorite(isFavorite: Boolean) {
+    binding.lNumber.ivFavorite.apply {
+      if (isFavorite) setImageResource(R.drawable.ic_favorite_filled)
+      else setImageResource(R.drawable.ic_favorite_outlined)
     }
   }
 

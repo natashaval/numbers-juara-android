@@ -1,9 +1,6 @@
 package com.natashaval.numbertrivia.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.natashaval.numbertrivia.model.NumberData
 import com.natashaval.numbertrivia.model.Trivia
 import com.natashaval.numbertrivia.repository.NumberRepository
@@ -35,8 +32,11 @@ class NumberViewModel @Inject constructor(
     }
   }
 
-  fun insertNumberData(number: String) {
-    val numberData = NumberData(number = number, isFavorite = true)
+  fun insertNumberData(number: String, description: String) {
+    val numberData = NumberData(
+      number = number,
+      description = description,
+      isFavorite = true)
     viewModelScope.launch {
       repository.insertNumberData(numberData)
       setStatus(ADD_TO_FAVORITE_KEY)
@@ -45,6 +45,10 @@ class NumberViewModel @Inject constructor(
 
   fun setStatus(status: String) {
     _status.value = status
+  }
+
+  fun getNumberData(number: String): LiveData<NumberData> {
+    return repository.getNumberData(number).asLiveData()
   }
 }
 

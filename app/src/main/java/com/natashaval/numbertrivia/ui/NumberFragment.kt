@@ -49,7 +49,7 @@ class NumberFragment : Fragment() {
             trivia = tr, number = number)
           findNavController().navigate(action)
         }
-        addToFavorite(tr)
+        addToFavorite(number, desc)
       }
     }
 
@@ -74,9 +74,9 @@ class NumberFragment : Fragment() {
     }
   }
 
-  private fun addToFavorite(trivia: String) {
+  private fun addToFavorite(number: String, description: String) {
     binding.lNumber.ivFavorite.setOnClickListener {
-      viewModel.insertNumberData(trivia)
+      viewModel.insertNumberData(number, description)
       binding.lNumber.ivFavorite.setImageResource(R.drawable.ic_favorite_filled)
     }
   }

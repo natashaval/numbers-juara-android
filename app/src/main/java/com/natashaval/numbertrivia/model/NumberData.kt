@@ -11,6 +11,10 @@ data class NumberData(
   val id: Int = 0,
   @ColumnInfo(name = "number")
   val number: String,
+  @ColumnInfo(name = "description")
+  val description: String,
   @ColumnInfo(name = "is_favorite")
   val isFavorite: Boolean = false
-)
+) {
+  fun getTrivia(): String = "$number $description"
+}
