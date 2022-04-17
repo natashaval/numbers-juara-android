@@ -52,19 +52,6 @@ class NumberFragment : Fragment() {
         changeFavorite(numberData)
       }
     }
-
-    viewModel.status.observe(viewLifecycleOwner) {
-      when (it) {
-        ADD_TO_FAVORITE_KEY -> {
-          setFavoriteToast(getString(R.string.add_to_favorite))
-          viewModel.setStatus("")
-        }
-        REMOVE_FROM_FAVORITE_KEY -> {
-          setFavoriteToast(getString(R.string.remove_from_favorite))
-          viewModel.setStatus("")
-        }
-      }
-    }
   }
 
   private fun generateNewTrivia() {
@@ -92,12 +79,6 @@ class NumberFragment : Fragment() {
     )
   }
 
-  private fun setFavoriteToast(message: String) {
-    if (activity?.isFinishing == false && isAdded) {
-      Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-    }
-  }
-
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     inflater.inflate(R.menu.layout_menu, menu)
   }
@@ -116,10 +97,5 @@ class NumberFragment : Fragment() {
   override fun onDestroyView() {
     super.onDestroyView()
     _binding = null
-  }
-
-  companion object {
-    const val ADD_TO_FAVORITE_KEY = "add"
-    const val REMOVE_FROM_FAVORITE_KEY = "remove"
   }
 }
