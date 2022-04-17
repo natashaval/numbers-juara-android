@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.natashaval.numbertrivia.R
 import com.natashaval.numbertrivia.adapter.FavoriteAdapter
@@ -32,7 +33,8 @@ class FavoriteFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     val favoriteAdapter = FavoriteAdapter {
-      Toast.makeText(requireContext(), "clicked ${it.number}", Toast.LENGTH_SHORT).show()
+      val action = FavoriteFragmentDirections.actionFavoriteFragmentToDetailFragment(it.number)
+      findNavController().navigate(action)
     }
     binding.rvFavorite.apply {
       adapter = favoriteAdapter

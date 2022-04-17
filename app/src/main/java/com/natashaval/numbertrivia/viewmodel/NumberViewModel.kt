@@ -38,13 +38,19 @@ class NumberViewModel @Inject constructor(
     }
   }
 
-  fun insertNumberData(number: String, description: String) {
-    val numberData = NumberData(
-      number = number,
-      description = description,
-      isFavorite = true)
+  fun insertOrUpdate(numberData: NumberData) {
+    numberData.isFavorite = true
     viewModelScope.launch {
-      repository.insertNumberData(numberData)
+      if (null == getNumberData(numberData.number).value) {
+        repository.insertNumberData(numberData)
+      } else {
+        repository.updateNumberData(numberData)
+      }
+      _trivia.postValue(
+        repository.getNumberDataFromTrivia(
+          numberData.number, numberData.description
+        )
+      )
       setStatus(ADD_TO_FAVORITE_KEY)
     }
   }
@@ -53,12 +59,16 @@ class NumberViewModel @Inject constructor(
     _status.value = status
   }
 
+  fun getNumberData(number: Long): LiveData<NumberData> {
+    return repository.getNumberData(number).asLiveData()
+  }
+
   fun getAllNumbers(): LiveData<List<NumberData>> {
     return repository.getAllNumbers().asLiveData()
   }
 }
 
-fun String.separateNumber(): Pair<String, String> {
+fun String.separateNumber(): Pair<Long, String> {
   val splitString = this.split(" ", limit = 2)
-  return Pair(splitString[0], splitString[1])
+  return Pair(splitString[0].toLong(), splitString[1])
 }

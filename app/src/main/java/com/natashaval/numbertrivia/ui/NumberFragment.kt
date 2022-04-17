@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.natashaval.numbertrivia.R
 import com.natashaval.numbertrivia.databinding.FragmentNumberBinding
+import com.natashaval.numbertrivia.model.NumberData
 import com.natashaval.numbertrivia.viewmodel.NumberViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,14 +41,15 @@ class NumberFragment : Fragment() {
   private fun observeNumberTrivia() {
     viewModel.trivia.observe(viewLifecycleOwner) { numberData ->
       binding.lNumber.apply {
-        btNumber.text = numberData.number
+        btNumber.text = numberData.number.toString()
         tvDesc.text = numberData.description
         btNumber.setOnClickListener {
           val action = NumberFragmentDirections.actionNumberFragmentToDetailFragment(
             number = numberData.number)
           findNavController().navigate(action)
         }
-        addToFavorite(numberData.number, numberData.description)
+        setImageFavorite(numberData.isFavorite)
+        addToFavorite(numberData)
       }
     }
 
@@ -72,11 +74,17 @@ class NumberFragment : Fragment() {
     }
   }
 
-  private fun addToFavorite(number: String, description: String) {
+  private fun addToFavorite(numberData: NumberData) {
     binding.lNumber.ivFavorite.setOnClickListener {
-      viewModel.insertNumberData(number, description)
-      binding.lNumber.ivFavorite.setImageResource(R.drawable.ic_favorite_filled)
+      viewModel.insertOrUpdate(numberData)
     }
+  }
+
+  private fun setImageFavorite(isFavorite: Boolean) {
+    binding.lNumber.ivFavorite.setImageResource(
+      if (isFavorite) R.drawable.ic_favorite_filled
+      else R.drawable.ic_favorite_outlined
+    )
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -15,6 +15,11 @@ class NumberRepository @Inject constructor(
   suspend fun getNumberApi(number: String?, type: String?) = service.getNumber(number, type)
 
   suspend fun insertNumberData(numberData: NumberData) = dao.insertNumber(numberData)
+  suspend fun updateNumberData(numberData: NumberData) = dao.updateNumber(numberData)
 
-  suspend fun getNumberDataFromTrivia(number: String, description: String) = dao.getNumberDataFromTrivia(number, description)
+  fun getNumberData(number: Long): Flow<NumberData> {
+    return dao.getNumber(number)
+  }
+
+  suspend fun getNumberDataFromTrivia(number: Long, description: String) = dao.getNumberDataFromTrivia(number, description)
 }

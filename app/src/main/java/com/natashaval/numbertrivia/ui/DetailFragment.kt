@@ -4,7 +4,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -25,6 +24,9 @@ class DetailFragment : Fragment() {
 
   private val viewModel: NumberViewModel by activityViewModels()
 
+  private val navigationArgs: DetailFragmentArgs by navArgs()
+  private val number by lazy { navigationArgs.number}
+
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
   ): View {
@@ -34,20 +36,34 @@ class DetailFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    viewModel.trivia.observe(viewLifecycleOwner) { numberData ->
-      bind(numberData)
-      copyToClipboard(numberData.getTrivia())
-      composeEmail(numberData.getTrivia())
+    viewModel.getNumberData(number).observe(viewLifecycleOwner) { numberData ->
+      if (null != numberData) {
+        setUiDetail(numberData)
+      } else {
+        setTrivia()
+      }
     }
   }
 
   private fun bind(numberData: NumberData) {
     binding.lNumber.apply {
       btNumber.isClickable = false
-      btNumber.text = numberData.number
+      btNumber.text = numberData.number.toString()
       tvDesc.text = numberData.description
       setImageFavorite(numberData.isFavorite)
     }
+  }
+
+  private fun setTrivia() {
+    viewModel.trivia.observe(viewLifecycleOwner) { numberData ->
+      setUiDetail(numberData)
+    }
+  }
+
+  private fun setUiDetail(numberData: NumberData) {
+    bind(numberData)
+    copyToClipboard(numberData.getTrivia())
+    composeEmail(numberData.getTrivia())
   }
 
   private fun copyToClipboard(trivia: String) {

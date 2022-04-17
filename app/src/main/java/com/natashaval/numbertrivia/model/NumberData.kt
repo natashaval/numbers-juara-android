@@ -10,11 +10,11 @@ data class NumberData(
   @ColumnInfo(name = "id")
   val id: Int = 0,
   @ColumnInfo(name = "number")
-  val number: String,
+  val number: Long,
   @ColumnInfo(name = "description")
   val description: String,
   @ColumnInfo(name = "is_favorite")
-  val isFavorite: Boolean = false
+  var isFavorite: Boolean = false
 ) {
   fun getTrivia(): String = "$number $description"
 }
