@@ -10,6 +10,8 @@ class NumberRepository @Inject constructor(
   private val service: NumberService,
   private val dao: NumberDao
 ) {
+  fun getAllNumbers() = dao.getAllNumbers()
+
   suspend fun getNumberApi(number: String?, type: String?) = service.getNumber(number, type)
 
   suspend fun insertNumberData(numberData: NumberData) = dao.insertNumber(numberData)

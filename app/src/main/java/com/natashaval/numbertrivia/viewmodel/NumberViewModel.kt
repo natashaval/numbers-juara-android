@@ -52,6 +52,10 @@ class NumberViewModel @Inject constructor(
   fun setStatus(status: String) {
     _status.value = status
   }
+
+  fun getAllNumbers(): LiveData<List<NumberData>> {
+    return repository.getAllNumbers().asLiveData()
+  }
 }
 
 fun String.separateNumber(): Pair<String, String> {

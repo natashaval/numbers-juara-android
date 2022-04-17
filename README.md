@@ -12,6 +12,7 @@ Codelabs Training: [juara-android](https://github.com/natashaval/juara-android)
 3. Retrofit
 4. Room
 5. Android Hilt dependency injection
+6. Recycler View List Adapter
 
 ## Credits
 Credits to [Numbers API](http://numbersapi.com/) for providing API trivia
