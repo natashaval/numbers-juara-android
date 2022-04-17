@@ -64,6 +64,22 @@ class DetailFragment : Fragment() {
     bind(numberData)
     copyToClipboard(numberData.getTrivia())
     composeEmail(numberData.getTrivia())
+    changeFavorite(numberData)
+  }
+
+  private fun changeFavorite(numberData: NumberData) {
+    binding.lNumber.ivFavorite.setOnClickListener {
+      // flip favorite
+      viewModel.insertOrUpdate(numberData, !numberData.isFavorite)
+      setImageFavorite(!numberData.isFavorite)
+    }
+  }
+
+  private fun setImageFavorite(isFavorite: Boolean) {
+    binding.lNumber.ivFavorite.setImageResource(
+      if (isFavorite) R.drawable.ic_favorite_filled
+      else R.drawable.ic_favorite_outlined
+    )
   }
 
   private fun copyToClipboard(trivia: String) {
@@ -85,13 +101,6 @@ class DetailFragment : Fragment() {
       if (activity?.packageManager?.resolveActivity(intent, 0) != null) {
         startActivity(intent)
       }
-    }
-  }
-
-  private fun setImageFavorite(isFavorite: Boolean) {
-    binding.lNumber.ivFavorite.apply {
-      if (isFavorite) setImageResource(R.drawable.ic_favorite_filled)
-      else setImageResource(R.drawable.ic_favorite_outlined)
     }
   }
 

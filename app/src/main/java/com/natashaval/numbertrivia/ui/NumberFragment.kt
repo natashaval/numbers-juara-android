@@ -56,13 +56,11 @@ class NumberFragment : Fragment() {
     viewModel.status.observe(viewLifecycleOwner) {
       when (it) {
         ADD_TO_FAVORITE_KEY -> {
-          Toast.makeText(requireContext(), getString(R.string.add_to_favorite), Toast.LENGTH_SHORT)
-            .show()
+          setFavoriteToast(getString(R.string.add_to_favorite))
           viewModel.setStatus("")
         }
         REMOVE_FROM_FAVORITE_KEY -> {
-          Toast.makeText(requireContext(), getString(R.string.remove_from_favorite), Toast.LENGTH_SHORT)
-            .show()
+          setFavoriteToast(getString(R.string.remove_from_favorite))
           viewModel.setStatus("")
         }
       }
@@ -92,6 +90,12 @@ class NumberFragment : Fragment() {
       if (isFavorite) R.drawable.ic_favorite_filled
       else R.drawable.ic_favorite_outlined
     )
+  }
+
+  private fun setFavoriteToast(message: String) {
+    if (activity?.isFinishing == false && isAdded) {
+      Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
