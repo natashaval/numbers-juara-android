@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NumberDao {
-    @Query("SELECT * FROM numbers ORDER BY number ASC")
+    @Query("SELECT * FROM numbers WHERE is_favorite = 1 ORDER BY number ASC")
     fun getAllNumbers(): Flow<List<NumberData>>
 
     @Query("SELECT * FROM numbers WHERE number=:number")

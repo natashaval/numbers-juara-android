@@ -49,7 +49,7 @@ class NumberFragment : Fragment() {
           findNavController().navigate(action)
         }
         setImageFavorite(numberData.isFavorite)
-        addToFavorite(numberData)
+        changeFavorite(numberData)
       }
     }
 
@@ -57,6 +57,11 @@ class NumberFragment : Fragment() {
       when (it) {
         ADD_TO_FAVORITE_KEY -> {
           Toast.makeText(requireContext(), getString(R.string.add_to_favorite), Toast.LENGTH_SHORT)
+            .show()
+          viewModel.setStatus("")
+        }
+        REMOVE_FROM_FAVORITE_KEY -> {
+          Toast.makeText(requireContext(), getString(R.string.remove_from_favorite), Toast.LENGTH_SHORT)
             .show()
           viewModel.setStatus("")
         }
@@ -74,9 +79,11 @@ class NumberFragment : Fragment() {
     }
   }
 
-  private fun addToFavorite(numberData: NumberData) {
+  private fun changeFavorite(numberData: NumberData) {
     binding.lNumber.ivFavorite.setOnClickListener {
-      viewModel.insertOrUpdate(numberData)
+      // flip favorite
+      viewModel.insertOrUpdate(numberData, !numberData.isFavorite)
+      setImageFavorite(!numberData.isFavorite)
     }
   }
 
