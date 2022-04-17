@@ -45,8 +45,7 @@ class NumberFragment : Fragment() {
         tvDesc.text = desc
         btNumber.setOnClickListener {
           val action = NumberFragmentDirections.actionNumberFragmentToDetailFragment(
-            trivia = tr,
-            number = number.toInt())
+            trivia = tr, number = number)
           findNavController().navigate(action)
         }
       }

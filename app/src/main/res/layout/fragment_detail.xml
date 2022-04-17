@@ -24,20 +24,19 @@
         android:text="@string/copy"
         app:icon="@drawable/ic_content_copy"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/l_number"
+        app:layout_constraintEnd_toStartOf="@id/bt_email"
         app:layout_constraintStart_toStartOf="@id/l_number"
-        app:layout_constraintEnd_toEndOf="@id/l_number" />
+        app:layout_constraintTop_toBottomOf="@id/l_number" />
 
     <Button
         android:id="@+id/bt_email"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        style="@style/Widget.MaterialComponents.Button.Icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="@string/email"
         app:icon="@drawable/ic_mail"
-        app:layout_constraintTop_toBottomOf="@id/bt_copy"
-        app:layout_constraintStart_toStartOf="@id/l_number"
-        app:layout_constraintEnd_toEndOf="@id/l_number"/>
+        app:layout_constraintEnd_toEndOf="@id/l_number"
+        app:layout_constraintStart_toEndOf="@id/bt_copy"
+        app:layout_constraintTop_toTopOf="@id/bt_copy" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
