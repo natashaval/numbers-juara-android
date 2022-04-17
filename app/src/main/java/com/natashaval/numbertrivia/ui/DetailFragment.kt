@@ -17,16 +17,12 @@ import com.natashaval.numbertrivia.R
 import com.natashaval.numbertrivia.databinding.FragmentDetailBinding
 import com.natashaval.numbertrivia.model.NumberData
 import com.natashaval.numbertrivia.viewmodel.NumberViewModel
-import com.natashaval.numbertrivia.viewmodel.separateNumber
 
 class DetailFragment : Fragment() {
 
   private var _binding: FragmentDetailBinding? = null
   private val binding get() = _binding!!
 
-  private val navigationArgs: DetailFragmentArgs by navArgs()
-  private val trivia by lazy { navigationArgs.trivia ?: "" }
-  private val number by lazy { navigationArgs.number ?: "random" }
   private val viewModel: NumberViewModel by activityViewModels()
 
   override fun onCreateView(
@@ -38,16 +34,10 @@ class DetailFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    viewModel.getNumberData(number).observe(viewLifecycleOwner) { numberData ->
-      val data = if (null != numberData) {
-        numberData
-      } else {
-        val (num, desc) = trivia.separateNumber()
-        NumberData(number = num, description = desc, isFavorite = false)
-      }
-      bind(data)
-      copyToClipboard(data.getTrivia())
-      composeEmail(data.getTrivia())
+    viewModel.trivia.observe(viewLifecycleOwner) { numberData ->
+      bind(numberData)
+      copyToClipboard(numberData.getTrivia())
+      composeEmail(numberData.getTrivia())
     }
   }
 

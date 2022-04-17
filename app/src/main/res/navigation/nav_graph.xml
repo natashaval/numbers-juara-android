@@ -28,10 +28,6 @@
         android:label="Number {number}"
         tools:layout="@layout/fragment_detail" >
         <argument
-            android:name="trivia"
-            app:argType="string"
-            app:nullable="true" />
-        <argument
             android:name="number"
             app:argType="string"
             app:nullable="true" />

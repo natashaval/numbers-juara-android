@@ -10,7 +10,6 @@ import com.google.android.material.chip.Chip
 import com.natashaval.numbertrivia.R
 import com.natashaval.numbertrivia.databinding.FragmentNumberBinding
 import com.natashaval.numbertrivia.viewmodel.NumberViewModel
-import com.natashaval.numbertrivia.viewmodel.separateNumber
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -39,17 +38,16 @@ class NumberFragment : Fragment() {
   }
 
   private fun observeNumberTrivia() {
-    viewModel.trivia.observe(viewLifecycleOwner) { tr ->
+    viewModel.trivia.observe(viewLifecycleOwner) { numberData ->
       binding.lNumber.apply {
-        val (number, desc) = tr.separateNumber()
-        btNumber.text = number
-        tvDesc.text = desc
+        btNumber.text = numberData.number
+        tvDesc.text = numberData.description
         btNumber.setOnClickListener {
           val action = NumberFragmentDirections.actionNumberFragmentToDetailFragment(
-            trivia = tr, number = number)
+            number = numberData.number)
           findNavController().navigate(action)
         }
-        addToFavorite(number, desc)
+        addToFavorite(numberData.number, numberData.description)
       }
     }
 

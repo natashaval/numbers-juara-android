@@ -13,8 +13,8 @@ import javax.inject.Inject
 class NumberViewModel @Inject constructor(
   private val repository: NumberRepository
 ) : ViewModel() {
-  private val _trivia = MutableLiveData<String>()
-  val trivia: LiveData<String> = _trivia
+  private val _trivia = MutableLiveData<NumberData>()
+  val trivia: LiveData<NumberData> = _trivia
 
   // status if insert / delete finished
   private val _status = MutableLiveData<String>()
@@ -28,7 +28,13 @@ class NumberViewModel @Inject constructor(
     viewModelScope.launch {
       val checkNumber = number.ifBlank { "random" }
       val result = repository.getNumberApi(checkNumber, type)
-      _trivia.postValue(result)
+      val (num, desc) = result.separateNumber()
+      val numberData = repository.getNumberDataFromTrivia(num, desc)
+      numberData?.let {
+        _trivia.postValue(it)
+      } ?: run {
+        _trivia.postValue(NumberData(number = num, description = desc, isFavorite = false))
+      }
     }
   }
 
@@ -45,10 +51,6 @@ class NumberViewModel @Inject constructor(
 
   fun setStatus(status: String) {
     _status.value = status
-  }
-
-  fun getNumberData(number: String): LiveData<NumberData> {
-    return repository.getNumberData(number).asLiveData()
   }
 }
 

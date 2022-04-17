@@ -14,7 +14,5 @@ class NumberRepository @Inject constructor(
 
   suspend fun insertNumberData(numberData: NumberData) = dao.insertNumber(numberData)
 
-  fun getNumberData(number: String): Flow<NumberData> {
-    return dao.getNumber(number)
-  }
+  suspend fun getNumberDataFromTrivia(number: String, description: String) = dao.getNumberDataFromTrivia(number, description)
 }
