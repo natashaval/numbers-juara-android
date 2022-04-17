@@ -6,11 +6,11 @@ Codelabs Training: [juara-android](https://github.com/natashaval/juara-android)
 
 ## Project Demo
 Number Trivia Project Demo  
-![Number Trivia Demo](https://youtu.be/HploO0biq48)  
+![Number Trivia Demo](screenshots/number_trivia.mp4)  
 Download the app here: [Google Drive](https://drive.google.com/drive/folders/1F95_fAqfvLtikyJLK8YpYs3XU_0x7oon?usp=sharing)
 
 ## Overview
-Number Trivia is a simple Android application to show an interesting fact about numbers. The trivia is taken from NumbersApi.
+Number Trivia is a simple Android application to show an interesting fact about numbers. The trivia is taken from NumbersApi.  
 ![Number Fragment](screenshots/number_fragment_0.png)
 - On opening the app, it shows fun fact from a random number
 ![Number Fragment Filled](screenshots/number_fragment.png)
