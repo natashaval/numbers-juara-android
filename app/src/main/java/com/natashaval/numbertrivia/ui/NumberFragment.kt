@@ -2,6 +2,7 @@ package com.natashaval.numbertrivia.ui
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -48,6 +49,17 @@ class NumberFragment : Fragment() {
             trivia = tr, number = number)
           findNavController().navigate(action)
         }
+        addToFavorite(tr)
+      }
+    }
+
+    viewModel.status.observe(viewLifecycleOwner) {
+      when (it) {
+        ADD_TO_FAVORITE_KEY -> {
+          Toast.makeText(requireContext(), getString(R.string.add_to_favorite), Toast.LENGTH_SHORT)
+            .show()
+          viewModel.setStatus("")
+        }
       }
     }
   }
@@ -57,8 +69,15 @@ class NumberFragment : Fragment() {
       btGenerate.setOnClickListener {
         val type = cgChip.findViewById<Chip>(cgChip.checkedChipId).text.toString().lowercase()
         val number = inputNumber.text.toString()
-        viewModel.getNumber(number, type)
+        viewModel.getNumberApi(number, type)
       }
+    }
+  }
+
+  private fun addToFavorite(trivia: String) {
+    binding.lNumber.ivFavorite.setOnClickListener {
+      viewModel.insertNumberData(trivia)
+      binding.lNumber.ivFavorite.setImageResource(R.drawable.ic_favorite_filled)
     }
   }
 
@@ -80,5 +99,10 @@ class NumberFragment : Fragment() {
   override fun onDestroyView() {
     super.onDestroyView()
     _binding = null
+  }
+
+  companion object {
+    const val ADD_TO_FAVORITE_KEY = "add"
+    const val REMOVE_FROM_FAVORITE_KEY = "remove"
   }
 }

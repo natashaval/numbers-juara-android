@@ -52,12 +52,10 @@ class DetailFragment : Fragment() {
 
   private fun copyToClipboard(trivia: String) {
     binding.btCopy.setOnClickListener {
-      trivia?.let {
-        val clipboard = activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip: ClipData = ClipData.newPlainText("number trivia", it)
-        clipboard.setPrimaryClip(clip)
-        Toast.makeText(requireContext(), "Trivia copied!", Toast.LENGTH_SHORT).show()
-      }
+      val clipboard = activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+      val clip: ClipData = ClipData.newPlainText("number trivia", trivia)
+      clipboard.setPrimaryClip(clip)
+      Toast.makeText(requireContext(), "Trivia copied!", Toast.LENGTH_SHORT).show()
     }
   }
 

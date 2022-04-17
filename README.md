@@ -10,7 +10,8 @@ Codelabs Training: [juara-android](https://github.com/natashaval/juara-android)
 1. Android Navigation
 2. ViewModel and LiveData
 3. Retrofit
-4. Android Hilt dependency injection
+4. Room
+5. Android Hilt dependency injection
 
 ## Credits
 Credits to [Numbers API](http://numbersapi.com/) for providing API trivia
