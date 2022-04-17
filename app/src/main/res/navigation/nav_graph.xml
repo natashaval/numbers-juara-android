@@ -20,7 +20,7 @@
     <fragment
         android:id="@+id/favoriteFragment"
         android:name="com.natashaval.numbertrivia.ui.FavoriteFragment"
-        android:label="fragment_favorite"
+        android:label="@string/action_favorite"
         tools:layout="@layout/fragment_favorite" />
     <fragment
         android:id="@+id/detailFragment"
