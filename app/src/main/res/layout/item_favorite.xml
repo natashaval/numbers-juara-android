@@ -16,7 +16,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="42" />
+        tools:text="@string/tools_number" />
 
     <TextView
         android:id="@+id/tv_desc"
@@ -30,6 +30,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/bt_number"
         app:layout_constraintTop_toTopOf="@id/bt_number"
-        tools:text="is the answer to the Ultimate Question of Life, the Universe, and Everything." />
+        tools:text="@string/tools_desc" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

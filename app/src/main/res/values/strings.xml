@@ -10,4 +10,6 @@
     <string name="remove_from_favorite">Remove from Favorite</string>
     <string name="action_favorite">Favorites</string>
     <string name="title_activity_compose">ComposeActivity</string>
+    <string name="tools_number">42</string>
+    <string name="tools_desc">is the answer to the Ultimate Question of Life, the Universe, and Everything.</string>
 </resources>

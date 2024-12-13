@@ -19,7 +19,7 @@
         app:layout_constraintEnd_toStartOf="@id/iv_favorite"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="42" />
+        tools:text="@string/tools_number" />
 
     <TextView
         android:id="@+id/tv_desc"
@@ -32,7 +32,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/bt_number"
-        tools:text="is the answer to the Ultimate Question of Life, the Universe, and Everything." />
+        tools:text="@string/tools_desc" />
 
     <ImageView
         android:id="@+id/iv_favorite"
