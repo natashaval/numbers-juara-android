@@ -13,7 +13,7 @@ class FavoriteAdapter(private val onItemClicked: (NumberData) -> Unit) :
   class FavoriteViewHolder(private val binding: ItemFavoriteBinding): RecyclerView.ViewHolder(binding.root) {
     fun bind(numberData: NumberData) {
       binding.apply {
-        btNumber.text = numberData.number.toString()
+        btNumber.text = String.format(numberData.number.toString())
         tvDesc.text = numberData.description
       }
     }
