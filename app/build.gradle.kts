@@ -74,42 +74,38 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     // navigation component
-    val nav_version = "2.8.5"
-    implementation("androidx.navigation:navigation-compose:$nav_version")
-    implementation("androidx.navigation:navigation-fragment:$nav_version")
-    implementation("androidx.navigation:navigation-ui:$nav_version")
-    androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
+    androidTestImplementation(libs.androidx.navigation.testing)
 
     // viewmodel
-    val lifecycle_version = "2.8.7"
-    val arch_version = "2.2.0"
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version")
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.savedstate)
     // unit test livedata
-    testImplementation("androidx.arch.core:core-testing:$arch_version")
+    testImplementation(libs.androidx.core.testing)
 
     // retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
-    testImplementation("com.squareup.okhttp3:mockwebserver:4.9.3")
+    implementation(libs.retrofit)
+    implementation(libs.converter.scalars)
+    testImplementation(libs.mockwebserver)
 
     // room database
-    val room_version = "2.6.1"
-    implementation("androidx.room:room-runtime:$room_version")
-    implementation("androidx.room:room-ktx:$room_version")
-    testImplementation("androidx.room:room-testing:$room_version")
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    testImplementation(libs.androidx.room.testing)
 //    kapt 'androidx.room:room-compiler:2.6.1'
 
     // timber
-    implementation("com.jakewharton.timber:timber:5.0.1")
+    implementation(libs.timber)
     // preferences store
-    implementation("androidx.datastore:datastore-preferences:1.1.1")
+    implementation(libs.androidx.datastore.preferences)
 
     // hilt dependency injection
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
 }
 
 // Allow references to generated code
