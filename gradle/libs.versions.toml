@@ -1,5 +1,5 @@
 [versions]
-agp = "8.4.1"
+agp = "8.4.2"
 converterScalars = "2.9.0"
 coreTesting = "2.2.0"
 datastorePreferences = "1.1.1"
@@ -8,11 +8,11 @@ hiltAndroidCompiler = "2.51.1"
 kotlin = "1.9.0"
 coreKtx = "1.10.1"
 junit = "4.13.2"
-junitVersion = "1.1.5"
-espressoCore = "3.5.1"
-lifecycleRuntimeKtx = "2.6.1"
-activityCompose = "1.8.0"
-composeBom = "2023.08.00"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+lifecycleRuntimeKtx = "2.8.7"
+activityCompose = "1.9.3"
+composeBom = "2024.12.01"
 lifecycleViewmodelKtx = "2.8.7"
 mockwebserver = "4.9.3"
 navigationCompose = "2.8.5"
@@ -21,6 +21,7 @@ navigationSafeArgsGradlePlugin = "2.8.5"
 navigationTesting = "2.8.5"
 navigationUi = "2.8.5"
 retrofit = "2.11.0"
+roomCompiler = "2.6.1"
 roomKtx = "2.6.1"
 roomRuntime = "2.6.1"
 roomTesting = "2.6.1"
@@ -40,6 +41,7 @@ androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragme
 androidx-navigation-safe-args-gradle-plugin = { module = "androidx.navigation:navigation-safe-args-gradle-plugin", version.ref = "navigationSafeArgsGradlePlugin" }
 androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "navigationTesting" }
 androidx-navigation-ui = { module = "androidx.navigation:navigation-ui", version.ref = "navigationUi" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "roomTesting" }

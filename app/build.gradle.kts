@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "com.natashaval.numbertrivia"
-        minSdk = 23
+        minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -96,7 +96,8 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     testImplementation(libs.androidx.room.testing)
-//    kapt 'androidx.room:room-compiler:2.6.1'
+    kapt(libs.androidx.room.compiler)
+
 
     // timber
     implementation(libs.timber)
