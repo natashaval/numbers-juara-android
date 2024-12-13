@@ -2,7 +2,7 @@ package com.natashaval.numbertrivia.ui
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -20,11 +20,6 @@ class NumberFragment : Fragment() {
   private val binding get() = _binding!!
   private val viewModel: NumberViewModel by activityViewModels()
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setHasOptionsMenu(true)
-  }
-
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
   ): View {
@@ -36,12 +31,13 @@ class NumberFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     observeNumberTrivia()
     generateNewTrivia()
+    addMenu()
   }
 
   private fun observeNumberTrivia() {
     viewModel.trivia.observe(viewLifecycleOwner) { numberData ->
       binding.lNumber.apply {
-        btNumber.text = numberData.number.toString()
+        btNumber.text = String.format(numberData.number.toString())
         tvDesc.text = numberData.description
         btNumber.setOnClickListener {
           val action = NumberFragmentDirections.actionNumberFragmentToDetailFragment(
@@ -79,19 +75,24 @@ class NumberFragment : Fragment() {
     )
   }
 
-  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    inflater.inflate(R.menu.layout_menu, menu)
-  }
-
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    return when(item.itemId) {
-      R.id.action_favorite -> {
-        val action = NumberFragmentDirections.actionNumberFragmentToFavoriteFragment()
-        findNavController().navigate(action)
-        return true
+  private fun addMenu() {
+    requireActivity().addMenuProvider(object : MenuProvider {
+      override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.layout_menu, menu)
       }
-      else -> super.onOptionsItemSelected(item)
-    }
+
+      override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        return when(menuItem.itemId) {
+          R.id.action_favorite -> {
+            val action = NumberFragmentDirections.actionNumberFragmentToFavoriteFragment()
+            findNavController().navigate(action)
+            return true
+          }
+          else -> false
+        }
+      }
+
+    }, viewLifecycleOwner)
   }
 
   override fun onDestroyView() {
