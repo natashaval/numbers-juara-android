@@ -1,63 +1,61 @@
 package com.natashaval.numbertrivia.compose.ui
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.natashaval.numbertrivia.R
 import com.natashaval.numbertrivia.compose.ui.theme.NumberTriviaTheme
 
 
 @Composable
-fun IconOutlinedButton(
+fun CustomOutlinedIconButton(
     modifier: Modifier = Modifier,
     icon: ImageVector,
-    text: String,
+    @StringRes stringRes: Int,
     onClick: () -> Unit
 ) {
     OutlinedButton(
         modifier = modifier,
         onClick = onClick
     ) {
-        Icon(imageVector = icon, contentDescription = text)
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(text = text)
+        Icon(imageVector = icon, contentDescription = stringResource(stringRes))
+        Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+        Text(text = stringResource(stringRes))
     }
 }
 
 @Composable
-fun IconButton(
+fun CustomIconButton(
     modifier: Modifier = Modifier,
     icon: ImageVector,
-    text: String,
+    @StringRes stringRes: Int,
     onClick: () -> Unit
 ) {
     Button(
         modifier = modifier,
         onClick = onClick
     ) {
-        Icon(imageVector = icon, contentDescription = text)
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(text = text)
+        Icon(imageVector = icon, contentDescription = stringResource(stringRes))
+        Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+        Text(text = stringResource(stringRes))
     }
 }
 
@@ -67,16 +65,16 @@ fun DetailCopySendButton(modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
-        IconOutlinedButton(
+        CustomOutlinedIconButton(
             modifier = Modifier,
             icon = Icons.Default.ContentCopy,
-            text = stringResource(R.string.copy),
+            stringRes = R.string.copy,
             onClick = {}
         )
-        IconButton(
+        CustomIconButton(
             modifier = Modifier,
             icon = Icons.Default.MailOutline,
-            text = stringResource(R.string.email),
+            stringRes = R.string.email,
             onClick = {}
         )
     }

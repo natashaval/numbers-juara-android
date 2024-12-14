@@ -1,30 +1,29 @@
 package com.natashaval.numbertrivia.compose.ui
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.CopyAll
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.MailOutline
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.filled.Lightbulb
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -81,5 +80,72 @@ fun NumberDescLayout(modifier: Modifier = Modifier) {
 fun NumberDescLayoutPreview() {
     NumberTriviaTheme {
         NumberDescLayout()
+    }
+}
+
+@Composable
+fun NumberTextField(modifier: Modifier = Modifier) {
+    TextField(
+        value = "",
+        onValueChange = {},
+        modifier = modifier,
+        leadingIcon = {
+            Icon(
+                painter = painterResource(R.drawable.ic_123),
+                contentDescription = ""
+            )
+        },
+        label = {
+            Text(
+                text = stringResource(R.string.insert_number)
+            )
+        }
+    )
+}
+
+@Composable
+fun NumberChip(@StringRes stringRes: Int) {
+    var selected by remember { mutableStateOf(false) }
+    FilterChip(
+        onClick = { selected = !selected },
+        label = {
+            Text(stringResource(stringRes))
+        },
+        selected = selected,
+    )
+}
+
+@Composable
+fun SelectionLayout(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        NumberTextField(
+            modifier = Modifier
+        )
+        Row(
+            modifier = Modifier.padding(top = 16.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            NumberChip(R.string.chip_trivia)
+            NumberChip(R.string.chip_math)
+        }
+        CustomIconButton(
+            modifier = Modifier.padding(top = 16.dp),
+            icon = Icons.Default.Lightbulb,
+            stringRes = R.string.generate,
+            onClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+fun SelectionPreview() {
+    NumberTriviaTheme {
+        SelectionLayout(
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
