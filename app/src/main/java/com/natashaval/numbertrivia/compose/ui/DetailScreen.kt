@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,7 +24,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.natashaval.numbertrivia.R
-import com.natashaval.numbertrivia.compose.SmallTopAppBar
 import com.natashaval.numbertrivia.compose.ui.theme.NumberTriviaTheme
 
 
@@ -32,7 +32,8 @@ fun IconOutlinedButton(
     modifier: Modifier = Modifier,
     icon: ImageVector,
     text: String,
-    onClick: () -> Unit) {
+    onClick: () -> Unit
+) {
     OutlinedButton(
         modifier = modifier,
         onClick = onClick
@@ -48,7 +49,8 @@ fun IconButton(
     modifier: Modifier = Modifier,
     icon: ImageVector,
     text: String,
-    onClick: () -> Unit) {
+    onClick: () -> Unit
+) {
     Button(
         modifier = modifier,
         onClick = onClick
@@ -89,20 +91,13 @@ fun DetailCopySendPreview() {
 }
 
 @Composable
-fun DetailScreen() {
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = { SmallTopAppBar() }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            verticalArrangement = Arrangement.SpaceEvenly
-        ) {
-            NumberDescLayout()
-            DetailCopySendButton()
-        }
+fun DetailScreen(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.SpaceEvenly
+    ) {
+        NumberDescLayout()
+        DetailCopySendButton()
     }
 }
 
@@ -110,6 +105,8 @@ fun DetailScreen() {
 @Composable
 fun DetailScreenPreview() {
     NumberTriviaTheme {
-        DetailScreen()
+        DetailScreen(
+            modifier = Modifier.fillMaxHeight()
+        )
     }
 }

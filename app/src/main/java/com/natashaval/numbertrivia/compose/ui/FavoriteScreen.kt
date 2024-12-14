@@ -15,15 +15,13 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.natashaval.numbertrivia.R
-import com.natashaval.numbertrivia.compose.SmallTopAppBar
 import com.natashaval.numbertrivia.compose.ui.theme.NumberTriviaTheme
 import com.natashaval.numbertrivia.model.Trivia
 
@@ -45,7 +43,7 @@ fun FavoriteItem(trivia: Trivia, modifier: Modifier = Modifier) {
             )
         }
         Text(
-            modifier = Modifier.padding(horizontal = 8.dp),
+            modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.padding_small)),
             text = trivia.description,
             style = MaterialTheme.typography.bodyMedium
         )
@@ -69,12 +67,22 @@ fun FavoriteColumnList(triviaList: List<Trivia>, modifier: Modifier = Modifier) 
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(2.dp),
-        contentPadding = PaddingValues(8.dp)
+        contentPadding = PaddingValues(dimensionResource(R.dimen.padding_small))
     ) {
         items(triviaList) { trivia ->
             FavoriteItem(trivia)
         }
     }
+}
+
+@Composable
+fun FavoriteScreen(
+    triviaList: List<Trivia>, // TODO: change with viewModel
+    modifier: Modifier = Modifier
+) {
+    FavoriteColumnList(
+        triviaList = triviaList,
+    )
 }
 
 @Preview
@@ -87,14 +95,6 @@ fun FavoriteColumnListScreen() {
         )
     }
     NumberTriviaTheme {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            topBar = { SmallTopAppBar() }
-        ) { innerPadding ->
-            FavoriteColumnList(
-                triviaList = triviaList,
-                Modifier.padding(top = innerPadding.calculateTopPadding())
-            )
-        }
+        FavoriteColumnList(triviaList)
     }
 }
