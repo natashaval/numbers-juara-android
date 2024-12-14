@@ -13,4 +13,6 @@
     <string name="tools_number">42</string>
     <string name="tools_desc">is the answer to the Ultimate Question of Life, the Universe, and Everything.</string>
     <string name="back_button">Back</string>
+    <string name="label_number_compose">Number Trivia Compose</string>
+    <string name="label_detail">Detail</string>
 </resources>

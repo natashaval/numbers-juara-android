@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Lightbulb
@@ -37,10 +36,12 @@ import com.natashaval.numbertrivia.R
 import com.natashaval.numbertrivia.compose.ui.theme.NumberTriviaTheme
 
 @Composable
-fun NumberDescLayout(modifier: Modifier = Modifier) {
+fun NumberDescLayout(
+    onNumberDetailClicked: () -> Unit = {},
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier
-//            .fillMaxWidth()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -50,7 +51,7 @@ fun NumberDescLayout(modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             TextButton(
-                onClick = {},
+                onClick = onNumberDetailClicked,
                 modifier = Modifier
                     .weight(1f)
                     .padding(start = 40.dp),
@@ -153,13 +154,18 @@ fun SelectionPreview() {
 }
 
 @Composable
-fun NumberScreen(modifier: Modifier = Modifier) {
+fun NumberScreen(
+    onNumberDetailClicked: () -> Unit = {},
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        NumberDescLayout()
+        NumberDescLayout(
+            onNumberDetailClicked = onNumberDetailClicked
+        )
         SelectionLayout(
             modifier = Modifier.padding(top = 32.dp)
         )
