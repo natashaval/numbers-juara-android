@@ -4,8 +4,12 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Lightbulb
@@ -36,7 +40,7 @@ import com.natashaval.numbertrivia.compose.ui.theme.NumberTriviaTheme
 fun NumberDescLayout(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
-            .fillMaxWidth()
+//            .fillMaxWidth()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -125,10 +129,10 @@ fun SelectionLayout(modifier: Modifier = Modifier) {
             modifier = Modifier
         )
         Row(
-            modifier = Modifier.padding(top = 16.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            modifier = Modifier.padding(top = 16.dp)
         ) {
             NumberChip(R.string.chip_trivia)
+            Spacer(modifier = Modifier.size(24.dp))
             NumberChip(R.string.chip_math)
         }
         CustomIconButton(
@@ -144,8 +148,30 @@ fun SelectionLayout(modifier: Modifier = Modifier) {
 @Composable
 fun SelectionPreview() {
     NumberTriviaTheme {
+        SelectionLayout()
+    }
+}
+
+@Composable
+fun NumberScreen(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        NumberDescLayout()
         SelectionLayout(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.padding(top = 32.dp)
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun NumberScreenPreview() {
+    NumberTriviaTheme {
+        NumberScreen(
+            modifier = Modifier.fillMaxHeight(),
         )
     }
 }
