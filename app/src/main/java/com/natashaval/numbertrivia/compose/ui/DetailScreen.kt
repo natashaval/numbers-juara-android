@@ -17,13 +17,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.natashaval.numbertrivia.R
 import com.natashaval.numbertrivia.compose.model.Trivia
 import com.natashaval.numbertrivia.compose.ui.theme.NumberTriviaTheme
+import com.natashaval.numbertrivia.compose.viewmodel.ComposeViewModel
 
 
 @Composable
@@ -90,16 +94,17 @@ fun DetailCopySendPreview() {
 }
 
 @Composable
-fun DetailScreen(modifier: Modifier = Modifier) {
+fun DetailScreen(
+    viewModel: ComposeViewModel = viewModel(),
+    modifier: Modifier = Modifier
+) {
+    val triviaUiState by viewModel.uiState.collectAsState()
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
         NumberDescLayout(
-            trivia = Trivia(
-                number = stringResource(R.string.tools_number),
-                description = stringResource(R.string.tools_desc)
-            )
+            trivia = triviaUiState
         )
         DetailCopySendButton()
     }

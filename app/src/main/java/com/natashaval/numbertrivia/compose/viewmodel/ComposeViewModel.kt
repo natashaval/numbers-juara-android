@@ -5,13 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.natashaval.numbertrivia.compose.model.Trivia
 import com.natashaval.numbertrivia.repository.NumberRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 //https://developer.android.com/codelabs/basic-android-kotlin-compose-viewmodel-and-state#4

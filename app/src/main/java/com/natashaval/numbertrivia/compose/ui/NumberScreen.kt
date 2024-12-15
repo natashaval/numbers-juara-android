@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -24,6 +25,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,6 +60,7 @@ fun NumberDescLayout(
             TextButton(
                 onClick = onNumberDetailClicked,
                 modifier = Modifier
+                    .defaultMinSize(minWidth = 1.dp, minHeight = 1.dp)
                     .weight(1f)
                     .padding(start = 40.dp),
             ) {
@@ -98,11 +101,16 @@ fun NumberDescLayoutPreview() {
     }
 }
 
+// https://developer.android.com/develop/ui/compose/state#state-hoisting
 @Composable
-fun NumberTextField(modifier: Modifier = Modifier) {
+fun NumberTextField(
+    numberInput: String,
+    onNumberChange: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     TextField(
-        value = "",
-        onValueChange = {},
+        value = numberInput,
+        onValueChange = onNumberChange,
         modifier = modifier,
         leadingIcon = {
             Icon(
@@ -132,6 +140,9 @@ fun NumberChip(@StringRes stringRes: Int) {
 
 @Composable
 fun SelectionLayout(
+    number: String,
+    onNumberChange: (String) -> Unit,
+    onChipChange: (String) -> Unit,
     onGenerateButtonClicked: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -140,6 +151,8 @@ fun SelectionLayout(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         NumberTextField(
+            numberInput = number,
+            onNumberChange = onNumberChange,
             modifier = Modifier
         )
         Row(
@@ -162,7 +175,7 @@ fun SelectionLayout(
 @Composable
 fun SelectionPreview() {
     NumberTriviaTheme {
-        SelectionLayout()
+        SelectionLayout(number = "", onNumberChange = {}, onChipChange = {})
     }
 }
 
@@ -173,6 +186,9 @@ fun NumberScreen(
     modifier: Modifier = Modifier
 ) {
     val triviaUiState by viewModel.uiState.collectAsState()
+    var numberInput by rememberSaveable { mutableStateOf("") }
+    var chipType by rememberSaveable { mutableStateOf("trivia") }
+
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -183,8 +199,11 @@ fun NumberScreen(
             onNumberDetailClicked = onNumberDetailClicked
         )
         SelectionLayout(
+            number = numberInput,
+            onNumberChange = { numberInput = it },
+            onChipChange = { chipType = it },
             onGenerateButtonClicked = {
-                viewModel.getNumberApi(number = "random", type = "trivia")
+                viewModel.getNumberApi(number = numberInput, type = chipType)
             },
             modifier = Modifier.padding(top = 32.dp)
         )

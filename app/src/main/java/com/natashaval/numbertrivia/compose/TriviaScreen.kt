@@ -16,6 +16,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -104,8 +105,8 @@ fun NumberTriviaComposeApp(
             startDestination = TriviaScreen.Number.name,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(route = TriviaScreen.Number.name) {
-                val viewModel = hiltViewModel<ComposeViewModel>()
+            composable(route = TriviaScreen.Number.name) { backStackEntry ->
+                val viewModel : ComposeViewModel = hiltViewModel(backStackEntry)
                 NumberScreen(
                     viewModel = viewModel,
                     onNumberDetailClicked = {
@@ -120,8 +121,15 @@ fun NumberTriviaComposeApp(
                     triviaList = listOf()
                 )
             }
-            composable(route = TriviaScreen.Detail.name) {
+            composable(route = TriviaScreen.Detail.name) { backStackEntry ->
+                // https://developer.android.com/develop/ui/compose/libraries#hilt-navigation
+//                https://stackoverflow.com/a/78377921
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry(TriviaScreen.Number.name)
+                }
+                val parentViewModel = hiltViewModel<ComposeViewModel>(parentEntry)
                 DetailScreen(
+                    viewModel = parentViewModel,
                     modifier = Modifier.fillMaxHeight()
                 )
             }
