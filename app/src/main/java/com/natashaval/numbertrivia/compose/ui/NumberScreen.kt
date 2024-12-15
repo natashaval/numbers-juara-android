@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,11 +33,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.natashaval.numbertrivia.R
+import com.natashaval.numbertrivia.compose.model.Trivia
 import com.natashaval.numbertrivia.compose.ui.theme.NumberTriviaTheme
+import com.natashaval.numbertrivia.compose.viewmodel.ComposeViewModel
 
 @Composable
 fun NumberDescLayout(
+    trivia: Trivia,
     onNumberDetailClicked: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -57,7 +62,7 @@ fun NumberDescLayout(
                     .padding(start = 40.dp),
             ) {
                 Text(
-                    text = stringResource(R.string.tools_number),
+                    text = trivia.number,
                     style = MaterialTheme.typography.displayLarge,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -73,7 +78,7 @@ fun NumberDescLayout(
         }
         Text(
             modifier = Modifier.padding(top = 16.dp),
-            text = stringResource(R.string.tools_desc),
+            text = trivia.description,
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center
         )
@@ -84,7 +89,12 @@ fun NumberDescLayout(
 @Composable
 fun NumberDescLayoutPreview() {
     NumberTriviaTheme {
-        NumberDescLayout()
+        NumberDescLayout(
+            trivia = Trivia(
+                number = stringResource(R.string.tools_number),
+                description = stringResource(R.string.tools_desc)
+            )
+        )
     }
 }
 
@@ -121,7 +131,10 @@ fun NumberChip(@StringRes stringRes: Int) {
 }
 
 @Composable
-fun SelectionLayout(modifier: Modifier = Modifier) {
+fun SelectionLayout(
+    onGenerateButtonClicked: () -> Unit = {},
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -140,7 +153,7 @@ fun SelectionLayout(modifier: Modifier = Modifier) {
             modifier = Modifier.padding(top = 16.dp),
             icon = Icons.Default.Lightbulb,
             stringRes = R.string.generate,
-            onClick = {},
+            onClick = onGenerateButtonClicked,
         )
     }
 }
@@ -155,18 +168,24 @@ fun SelectionPreview() {
 
 @Composable
 fun NumberScreen(
+    viewModel: ComposeViewModel = viewModel(),
     onNumberDetailClicked: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    val triviaUiState by viewModel.uiState.collectAsState()
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         NumberDescLayout(
+            trivia = triviaUiState,
             onNumberDetailClicked = onNumberDetailClicked
         )
         SelectionLayout(
+            onGenerateButtonClicked = {
+                viewModel.getNumberApi(number = "random", type = "trivia")
+            },
             modifier = Modifier.padding(top = 32.dp)
         )
     }
@@ -177,7 +196,7 @@ fun NumberScreen(
 fun NumberScreenPreview() {
     NumberTriviaTheme {
         NumberScreen(
-            modifier = Modifier.fillMaxHeight(),
+            modifier = Modifier.fillMaxHeight()
         )
     }
 }

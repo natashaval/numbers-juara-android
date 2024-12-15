@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -29,6 +30,7 @@ import com.natashaval.numbertrivia.compose.ui.DetailScreen
 import com.natashaval.numbertrivia.compose.ui.FavoriteScreen
 import com.natashaval.numbertrivia.compose.ui.NumberScreen
 import com.natashaval.numbertrivia.compose.ui.theme.NumberTriviaTheme
+import com.natashaval.numbertrivia.compose.viewmodel.ComposeViewModel
 
 enum class TriviaScreen(@StringRes val title: Int) {
     Number(title = R.string.label_number_compose),
@@ -103,7 +105,9 @@ fun NumberTriviaComposeApp(
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(route = TriviaScreen.Number.name) {
+                val viewModel = hiltViewModel<ComposeViewModel>()
                 NumberScreen(
+                    viewModel = viewModel,
                     onNumberDetailClicked = {
                         navController.navigate(TriviaScreen.Detail.name)
                     },

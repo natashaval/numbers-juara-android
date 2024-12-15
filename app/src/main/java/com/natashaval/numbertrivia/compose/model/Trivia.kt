@@ -1,4 +1,4 @@
-package com.natashaval.numbertrivia.model
+package com.natashaval.numbertrivia.compose.model
 
 // to show as Trivia Detail
 data class Trivia(

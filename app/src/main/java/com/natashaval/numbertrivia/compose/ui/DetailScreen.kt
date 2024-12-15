@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.natashaval.numbertrivia.R
+import com.natashaval.numbertrivia.compose.model.Trivia
 import com.natashaval.numbertrivia.compose.ui.theme.NumberTriviaTheme
 
 
@@ -94,7 +95,12 @@ fun DetailScreen(modifier: Modifier = Modifier) {
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        NumberDescLayout()
+        NumberDescLayout(
+            trivia = Trivia(
+                number = stringResource(R.string.tools_number),
+                description = stringResource(R.string.tools_desc)
+            )
+        )
         DetailCopySendButton()
     }
 }
