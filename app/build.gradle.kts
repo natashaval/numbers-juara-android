@@ -91,6 +91,7 @@ dependencies {
 
     // retrofit
     implementation(libs.retrofit)
+    implementation(libs.logging.interceptor)
     implementation(libs.converter.scalars)
     testImplementation(libs.mockwebserver)
 
@@ -109,6 +110,7 @@ dependencies {
     // hilt dependency injection
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 }
 
 // Allow references to generated code
