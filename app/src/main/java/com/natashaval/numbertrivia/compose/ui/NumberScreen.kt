@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.material3.FilterChip
@@ -24,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -43,6 +45,7 @@ import com.natashaval.numbertrivia.R
 import com.natashaval.numbertrivia.compose.model.Trivia
 import com.natashaval.numbertrivia.compose.ui.theme.NumberTriviaTheme
 import com.natashaval.numbertrivia.compose.viewmodel.ComposeViewModel
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun NumberDescLayout(
@@ -50,6 +53,7 @@ fun NumberDescLayout(
     onNumberDetailClicked: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    var isFavorite by remember { mutableStateOf(trivia.isFavorite) }
     Column(
         modifier = modifier
             .padding(16.dp),
@@ -74,10 +78,16 @@ fun NumberDescLayout(
                 )
             }
             IconButton(
-                onClick = {}
+                onClick = {
+                    isFavorite = !isFavorite
+                }
             ) {
                 Icon(
-                    imageVector = Icons.Default.FavoriteBorder,
+                    imageVector = if (isFavorite) {
+                        Icons.Default.Favorite
+                    } else {
+                        Icons.Default.FavoriteBorder
+                    },
                     contentDescription = stringResource(R.string.action_favorite)
                 )
             }
@@ -214,6 +224,37 @@ fun SelectionPreview() {
 }
 
 @Composable
+fun NumberScreenUI(
+    trivia: Trivia,
+    numberInput: String,
+    onNumberChange: (String) -> Unit,
+    typeChip: String,
+    onChipChange: (String) -> Unit,
+    onNumberDetailClicked: () -> Unit = {},
+    onGenerateButtonClicked: () -> Unit = {},
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        NumberDescLayout(
+            trivia = trivia,
+            onNumberDetailClicked = onNumberDetailClicked
+        )
+        SelectionLayout(
+            numberInput = numberInput,
+            onNumberChange = onNumberChange,
+            typeChip = typeChip,
+            onChipChange = onChipChange,
+            onGenerateButtonClicked = onGenerateButtonClicked,
+            modifier = Modifier.padding(top = 32.dp)
+        )
+    }
+}
+
+@Composable
 fun NumberScreen(
     viewModel: ComposeViewModel = viewModel(),
     onNumberDetailClicked: () -> Unit = {},
@@ -223,34 +264,34 @@ fun NumberScreen(
     var numberInput by rememberSaveable { mutableStateOf("") }
     var typeChip by rememberSaveable { mutableStateOf("trivia") }
 
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        NumberDescLayout(
-            trivia = triviaUiState,
-            onNumberDetailClicked = onNumberDetailClicked
-        )
-        SelectionLayout(
-            numberInput = numberInput,
-            onNumberChange = { numberInput = it },
-            typeChip = typeChip,
-            onChipChange = { typeChip = it },
-            onGenerateButtonClicked = {
-                viewModel.getNumberApi(number = numberInput, type = typeChip)
-            },
-            modifier = Modifier.padding(top = 32.dp)
-        )
-    }
+    NumberScreenUI(
+        trivia = triviaUiState,
+        numberInput = numberInput,
+        onNumberChange = { numberInput = it },
+        typeChip = typeChip,
+        onChipChange = { typeChip = it },
+        onGenerateButtonClicked = {
+            viewModel.getNumberApi(number = numberInput, type = typeChip)
+        },
+        onNumberDetailClicked = onNumberDetailClicked,
+        modifier = modifier
+    )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun NumberScreenPreview() {
     NumberTriviaTheme {
-        NumberScreen(
-            modifier = Modifier.fillMaxHeight()
+        NumberScreenUI(
+            modifier = Modifier.fillMaxHeight(),
+            trivia = Trivia(
+                number = stringResource(R.string.tools_number),
+                description = stringResource(R.string.tools_desc)
+            ),
+            numberInput = "42",
+            onNumberChange = {},
+            typeChip = "trivia",
+            onChipChange = {},
         )
     }
 }
