@@ -1,16 +1,13 @@
 package com.natashaval.numbertrivia.compose.ui
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -27,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -141,22 +137,30 @@ fun NumberTextField(
     )
 }
 
+// https://fvilarino.medium.com/a-playful-chips-selector-in-jetpack-compose-93507aa9e537
 @Composable
-fun NumberChip(@StringRes stringRes: Int) {
-    var selected by remember { mutableStateOf(false) }
+fun NumberChip(
+    label: String,
+    selectedChip: String,
+    onChipClick: (String) -> Unit,
+    modifier: Modifier = Modifier) {
     FilterChip(
-        onClick = { selected = !selected },
-        label = {
-            Text(stringResource(stringRes))
+        modifier = modifier,
+        onClick = {
+            onChipClick(label.lowercase())
         },
-        selected = selected,
+        label = {
+            Text(label)
+        },
+        selected = label.lowercase() == selectedChip,
     )
 }
 
 @Composable
 fun SelectionLayout(
-    number: String,
+    numberInput: String,
     onNumberChange: (String) -> Unit,
+    typeChip: String,
     onChipChange: (String) -> Unit,
     onGenerateButtonClicked: () -> Unit = {},
     modifier: Modifier = Modifier
@@ -167,16 +171,25 @@ fun SelectionLayout(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         NumberTextField(
-            numberInput = number,
+            numberInput = numberInput,
             onNumberChange = onNumberChange,
             modifier = Modifier
         )
         Row(
-            modifier = Modifier.padding(top = 16.dp)
+            modifier = Modifier.padding(top = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            NumberChip(R.string.chip_trivia)
-            Spacer(modifier = Modifier.size(24.dp))
-            NumberChip(R.string.chip_math)
+            val chips = listOf(
+                stringResource(R.string.chip_trivia),
+                stringResource(R.string.chip_math)
+            )
+            chips.forEach { chip ->
+                NumberChip(
+                    label = chip,
+                    selectedChip = typeChip,
+                    onChipClick = onChipChange
+                )
+            }
         }
         CustomIconButton(
             modifier = Modifier.padding(top = 16.dp),
@@ -191,7 +204,12 @@ fun SelectionLayout(
 @Composable
 fun SelectionPreview() {
     NumberTriviaTheme {
-        SelectionLayout(number = "", onNumberChange = {}, onChipChange = {})
+        SelectionLayout(
+            numberInput = "",
+            onNumberChange = {},
+            typeChip = "trivia",
+            onChipChange = {},
+        )
     }
 }
 
@@ -203,7 +221,7 @@ fun NumberScreen(
 ) {
     val triviaUiState by viewModel.uiState.collectAsState()
     var numberInput by rememberSaveable { mutableStateOf("") }
-    var chipType by rememberSaveable { mutableStateOf("trivia") }
+    var typeChip by rememberSaveable { mutableStateOf("trivia") }
 
     Column(
         modifier = modifier,
@@ -215,11 +233,12 @@ fun NumberScreen(
             onNumberDetailClicked = onNumberDetailClicked
         )
         SelectionLayout(
-            number = numberInput,
+            numberInput = numberInput,
             onNumberChange = { numberInput = it },
-            onChipChange = { chipType = it },
+            typeChip = typeChip,
+            onChipChange = { typeChip = it },
             onGenerateButtonClicked = {
-                viewModel.getNumberApi(number = numberInput, type = chipType)
+                viewModel.getNumberApi(number = numberInput, type = typeChip)
             },
             modifier = Modifier.padding(top = 32.dp)
         )
