@@ -9,7 +9,7 @@ interface NumberDao {
     @Query("SELECT * FROM numbers WHERE is_favorite = 1 ORDER BY number ASC")
     fun getAllNumbers(): Flow<List<NumberData>>
 
-    @Query("SELECT * FROM numbers WHERE number=:number")
+    @Query("SELECT * FROM numbers WHERE number=:number LIMIT 1")
     fun getNumber(number: Long): Flow<NumberData>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

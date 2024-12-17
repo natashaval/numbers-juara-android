@@ -41,11 +41,7 @@ class NumberViewModel @Inject constructor(
   fun insertOrUpdate(numberData: NumberData, isFavorite: Boolean) {
     numberData.isFavorite = isFavorite
     viewModelScope.launch {
-      if (null == getNumberData(numberData.number).value) {
-        repository.insertNumberData(numberData)
-      } else {
-        repository.updateNumberData(numberData)
-      }
+      repository.insertOrUpdate(numberData)
       _trivia.postValue(
         repository.getNumberDataFromTrivia(
           numberData.number, numberData.description

@@ -25,7 +25,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.natashaval.numbertrivia.R
-import com.natashaval.numbertrivia.compose.model.Trivia
 import com.natashaval.numbertrivia.compose.ui.theme.NumberTriviaTheme
 import com.natashaval.numbertrivia.compose.viewmodel.ComposeViewModel
 

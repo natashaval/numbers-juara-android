@@ -51,6 +51,7 @@ import kotlinx.coroutines.flow.StateFlow
 fun NumberDescLayout(
     trivia: Trivia,
     onNumberDetailClicked: () -> Unit = {},
+    onFavoriteIconClicked: (Boolean) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     var isFavorite by remember { mutableStateOf(trivia.isFavorite) }
@@ -80,6 +81,7 @@ fun NumberDescLayout(
             IconButton(
                 onClick = {
                     isFavorite = !isFavorite
+                    onFavoriteIconClicked(isFavorite)
                 }
             ) {
                 Icon(
@@ -231,6 +233,7 @@ fun NumberScreenUI(
     typeChip: String,
     onChipChange: (String) -> Unit,
     onNumberDetailClicked: () -> Unit = {},
+    onFavoriteIconClicked: (Boolean) -> Unit = {},
     onGenerateButtonClicked: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -241,7 +244,8 @@ fun NumberScreenUI(
     ) {
         NumberDescLayout(
             trivia = trivia,
-            onNumberDetailClicked = onNumberDetailClicked
+            onNumberDetailClicked = onNumberDetailClicked,
+            onFavoriteIconClicked = onFavoriteIconClicked
         )
         SelectionLayout(
             numberInput = numberInput,
@@ -274,6 +278,9 @@ fun NumberScreen(
             viewModel.getNumberApi(number = numberInput, type = typeChip)
         },
         onNumberDetailClicked = onNumberDetailClicked,
+        onFavoriteIconClicked = { isFavorite ->
+            viewModel.insertOrUpdate(triviaUiState, isFavorite)
+        },
         modifier = modifier
     )
 }
