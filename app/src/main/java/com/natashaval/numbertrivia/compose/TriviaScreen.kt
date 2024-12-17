@@ -117,8 +117,8 @@ fun NumberTriviaComposeApp(
             }
             composable(route = TriviaScreen.Favorite.name) {
                 FavoriteScreen(
-                    modifier = Modifier.fillMaxHeight(),
-                    triviaList = listOf()
+                    viewModel = hiltViewModel<ComposeViewModel>(),
+                    modifier = Modifier.fillMaxHeight()
                 )
             }
             composable(route = TriviaScreen.Detail.name) { backStackEntry ->

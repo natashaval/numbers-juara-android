@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -18,9 +19,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.natashaval.numbertrivia.R
 import com.natashaval.numbertrivia.compose.ui.theme.NumberTriviaTheme
 import com.natashaval.numbertrivia.compose.model.Trivia
+import com.natashaval.numbertrivia.compose.viewmodel.ComposeViewModel
 
 @Composable
 fun FavoriteItem(trivia: Trivia, modifier: Modifier = Modifier) {
@@ -74,11 +77,12 @@ fun FavoriteColumnList(triviaList: List<Trivia>, modifier: Modifier = Modifier) 
 
 @Composable
 fun FavoriteScreen(
-    triviaList: List<Trivia>, // TODO: change with viewModel
+    viewModel: ComposeViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
+    val triviaList = viewModel.favoriteTriviaList.collectAsState()
     FavoriteColumnList(
-        triviaList = triviaList,
+        triviaList = triviaList.value,
         modifier = modifier
     )
 }

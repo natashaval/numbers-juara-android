@@ -7,9 +7,12 @@ import com.natashaval.numbertrivia.model.NumberData
 import com.natashaval.numbertrivia.repository.NumberRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -28,6 +31,18 @@ class ComposeViewModel @Inject constructor(
         )
     )
     val uiState: StateFlow<Trivia> = _uiState.asStateFlow()
+
+    val favoriteTriviaList: StateFlow<List<Trivia>> = repository.getAllNumbers()
+        .map { numberDataList ->
+            numberDataList.map { numberData ->
+                Trivia(
+                    number = numberData.number.toString(),
+                    description = numberData.description,
+                    isFavorite = numberData.isFavorite
+                )
+            }
+        }
+        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     init {
         getNumberApi(number = "random", type = "trivia")
@@ -49,9 +64,9 @@ class ComposeViewModel @Inject constructor(
         viewModelScope.launch {
             numberData?.let {
                 repository.insertOrUpdate(numberData)
-                _uiState.update {
-                    repository.getNumberData(numberData.number).first().toTrivia()
-                }
+//                _uiState.update {
+//                    repository.getNumberData(numberData.number).first().toTrivia()
+//                }
             }
         }
     }
