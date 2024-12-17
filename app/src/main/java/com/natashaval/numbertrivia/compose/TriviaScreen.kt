@@ -90,7 +90,7 @@ fun NumberTriviaComposeApp(
             NumberTopAppBar(
                 currentScreen = currentScreen,
                 canNavigateBack = navController.previousBackStackEntry != null,
-                navigateUp = { navController.navigateUp() },
+                navigateUp = { if (navController.previousBackStackEntry != null) navController.navigateUp() },
                 isMainScreen = currentScreen == TriviaScreen.Number.name,
                 onActionFavoriteClicked = {
                     navController.navigate(TriviaScreen.Favorite.name)
@@ -127,6 +127,9 @@ fun NumberTriviaComposeApp(
             composable(route = "${TriviaScreen.Detail.name}/{numberId}") { backStackEntry ->
                 // https://developer.android.com/develop/ui/compose/libraries#hilt-navigation
 //                https://stackoverflow.com/a/78377921
+
+                // check if coming from NumberScreen or FavoriteScreen
+                val previousScreen = navController.previousBackStackEntry?.destination?.route
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry(TriviaScreen.Number.name)
                 }
@@ -134,6 +137,7 @@ fun NumberTriviaComposeApp(
                 numberId?.let {
                     val parentViewModel = hiltViewModel<ComposeViewModel>(parentEntry)
                     DetailScreen(
+                        previousScreen = previousScreen.orEmpty(),
                         numberId = it,
                         viewModel = parentViewModel,
                         modifier = Modifier.fillMaxHeight()

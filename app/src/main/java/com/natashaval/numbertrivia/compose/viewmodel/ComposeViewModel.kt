@@ -25,13 +25,15 @@ import javax.inject.Inject
 class ComposeViewModel @Inject constructor(
     private val repository: NumberRepository
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(
-        Trivia(
-            number = "42",
-            description = "is the answer to the Ultimate Question of Life, the Universe, and Everything."
-        )
+    private val initialTrivia = Trivia(
+        number = "42",
+        description = "is the answer to the Ultimate Question of Life, the Universe, and Everything."
     )
+    private val _uiState = MutableStateFlow(initialTrivia)
     val uiState: StateFlow<Trivia> = _uiState.asStateFlow()
+
+    private val _detailUiState = MutableStateFlow(initialTrivia)
+    val detailUiState = _detailUiState.asStateFlow()
 
     init {
         getNumberApi(number = "random", type = "trivia")
@@ -39,7 +41,7 @@ class ComposeViewModel @Inject constructor(
 
     fun getNumberApi(number: String, type: String?) {
         viewModelScope.launch {
-            val  numberInput = number.ifEmpty { "random" }
+            val numberInput = number.ifEmpty { "random" }
             val result = repository.getNumberApi(numberInput, type)
             val (num, desc) = result.separateNumber()
             _uiState.update {
@@ -51,7 +53,7 @@ class ComposeViewModel @Inject constructor(
     fun getNumberData(number: String) {
         viewModelScope.launch {
             repository.getNumberData(number.toLong()).collectLatest { numberData ->
-                _uiState.update {
+                _detailUiState.update {
                     numberData.toTrivia()
                 }
             }
@@ -70,9 +72,9 @@ class ComposeViewModel @Inject constructor(
     private fun Trivia.toNumberData(isFavorite: Boolean): NumberData? {
         try {
             return NumberData(
-            number = this.number.toLong(),
-            description = this.description,
-            isFavorite = isFavorite
+                number = this.number.toLong(),
+                description = this.description,
+                isFavorite = isFavorite
             )
         } catch (e: NumberFormatException) {
             Timber.e("Failed to parse number String to Long")

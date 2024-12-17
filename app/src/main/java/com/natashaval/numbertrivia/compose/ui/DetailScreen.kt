@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.natashaval.numbertrivia.R
+import com.natashaval.numbertrivia.compose.TriviaScreen
 import com.natashaval.numbertrivia.compose.ui.theme.NumberTriviaTheme
 import com.natashaval.numbertrivia.compose.viewmodel.ComposeViewModel
 
@@ -94,12 +95,15 @@ fun DetailCopySendPreview() {
 
 @Composable
 fun DetailScreen(
+    previousScreen : String = "",
     numberId: String,
     viewModel: ComposeViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
+    // differentiate detail and favorite
     val triviaUiState by viewModel.uiState.collectAsState()
-    if (numberId != triviaUiState.number) {
+    val detailUiState by viewModel.detailUiState.collectAsState()
+    if (previousScreen == TriviaScreen.Favorite.name) { // if numberId from FavoriteScreen different from the number from NumberScreen
         viewModel.getNumberData(numberId)
     }
     Column(
@@ -107,7 +111,7 @@ fun DetailScreen(
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
         NumberDescLayout(
-            trivia = triviaUiState
+            trivia = if (previousScreen == TriviaScreen.Favorite.name) detailUiState else triviaUiState
         )
         DetailCopySendButton()
     }
