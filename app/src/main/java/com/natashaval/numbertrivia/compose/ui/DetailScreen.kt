@@ -94,10 +94,14 @@ fun DetailCopySendPreview() {
 
 @Composable
 fun DetailScreen(
+    numberId: String,
     viewModel: ComposeViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
     val triviaUiState by viewModel.uiState.collectAsState()
+    if (numberId != triviaUiState.number) {
+        viewModel.getNumberData(numberId)
+    }
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceEvenly
@@ -114,6 +118,7 @@ fun DetailScreen(
 fun DetailScreenPreview() {
     NumberTriviaTheme {
         DetailScreen(
+            numberId = "42",
             modifier = Modifier.fillMaxHeight()
         )
     }

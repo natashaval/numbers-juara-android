@@ -32,6 +32,7 @@ import com.natashaval.numbertrivia.compose.ui.FavoriteScreen
 import com.natashaval.numbertrivia.compose.ui.NumberScreen
 import com.natashaval.numbertrivia.compose.ui.theme.NumberTriviaTheme
 import com.natashaval.numbertrivia.compose.viewmodel.ComposeViewModel
+import com.natashaval.numbertrivia.compose.viewmodel.FavoriteViewModel
 
 enum class TriviaScreen(@StringRes val title: Int) {
     Number(title = R.string.label_number_compose),
@@ -43,7 +44,7 @@ enum class TriviaScreen(@StringRes val title: Int) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NumberTopAppBar(
-    currentScreen: TriviaScreen,
+    currentScreen: String,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     isMainScreen: Boolean = false,
@@ -55,7 +56,7 @@ fun NumberTopAppBar(
         colors = TopAppBarDefaults.mediumTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
-        title = { Text(stringResource(id = currentScreen.title)) },
+        title = { Text(text = currentScreen) },
         navigationIcon = {
             if (canNavigateBack) {
                 IconButton(onClick = navigateUp) {
@@ -83,16 +84,14 @@ fun NumberTriviaComposeApp(
     navController: NavHostController = rememberNavController(),
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentScreen = TriviaScreen.valueOf(
-        backStackEntry?.destination?.route ?: TriviaScreen.Number.name
-    )
+    val currentScreen = backStackEntry?.destination?.route ?: TriviaScreen.valueOf(TriviaScreen.Number.name).toString()
     Scaffold(
         topBar = {
             NumberTopAppBar(
                 currentScreen = currentScreen,
                 canNavigateBack = navController.previousBackStackEntry != null,
                 navigateUp = { navController.navigateUp() },
-                isMainScreen = currentScreen == TriviaScreen.valueOf(TriviaScreen.Number.name),
+                isMainScreen = currentScreen == TriviaScreen.Number.name,
                 onActionFavoriteClicked = {
                     navController.navigate(TriviaScreen.Favorite.name)
                 }
@@ -109,29 +108,37 @@ fun NumberTriviaComposeApp(
                 val viewModel : ComposeViewModel = hiltViewModel(backStackEntry)
                 NumberScreen(
                     viewModel = viewModel,
-                    onNumberDetailClicked = {
-                        navController.navigate(TriviaScreen.Detail.name)
+                    onNumberDetailClicked = { number ->
+                        navController.navigate("${TriviaScreen.Detail.name}/$number")
                     },
                     modifier = Modifier.fillMaxHeight()
                 )
             }
             composable(route = TriviaScreen.Favorite.name) {
                 FavoriteScreen(
-                    viewModel = hiltViewModel<ComposeViewModel>(),
+                    viewModel = hiltViewModel<FavoriteViewModel>(),
+                    onNumberDetailClicked = { number ->
+                        navController.navigate("${TriviaScreen.Detail.name}/$number")
+                    },
                     modifier = Modifier.fillMaxHeight()
                 )
             }
-            composable(route = TriviaScreen.Detail.name) { backStackEntry ->
+            // Avoid passing complex data when navigating, instead pass minimum necessary information
+            composable(route = "${TriviaScreen.Detail.name}/{numberId}") { backStackEntry ->
                 // https://developer.android.com/develop/ui/compose/libraries#hilt-navigation
 //                https://stackoverflow.com/a/78377921
                 val parentEntry = remember(backStackEntry) {
                     navController.getBackStackEntry(TriviaScreen.Number.name)
                 }
-                val parentViewModel = hiltViewModel<ComposeViewModel>(parentEntry)
-                DetailScreen(
-                    viewModel = parentViewModel,
-                    modifier = Modifier.fillMaxHeight()
-                )
+                val numberId = backStackEntry.arguments?.getString("numberId")
+                numberId?.let {
+                    val parentViewModel = hiltViewModel<ComposeViewModel>(parentEntry)
+                    DetailScreen(
+                        numberId = it,
+                        viewModel = parentViewModel,
+                        modifier = Modifier.fillMaxHeight()
+                    )
+                }
             }
         }
     }

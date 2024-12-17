@@ -50,7 +50,7 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun NumberDescLayout(
     trivia: Trivia,
-    onNumberDetailClicked: () -> Unit = {},
+    onNumberDetailClicked: (String) -> Unit = {},
     onFavoriteIconClicked: (Boolean) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -66,7 +66,9 @@ fun NumberDescLayout(
             verticalAlignment = Alignment.CenterVertically
         ) {
             TextButton(
-                onClick = onNumberDetailClicked,
+                onClick = {
+                    onNumberDetailClicked(trivia.number)
+                },
                 modifier = Modifier
                     .defaultMinSize(minWidth = 1.dp, minHeight = 1.dp)
                     .weight(1f)
@@ -232,7 +234,7 @@ fun NumberScreenUI(
     onNumberChange: (String) -> Unit,
     typeChip: String,
     onChipChange: (String) -> Unit,
-    onNumberDetailClicked: () -> Unit = {},
+    onNumberDetailClicked: (String) -> Unit = {},
     onFavoriteIconClicked: (Boolean) -> Unit = {},
     onGenerateButtonClicked: () -> Unit = {},
     modifier: Modifier = Modifier
@@ -261,7 +263,7 @@ fun NumberScreenUI(
 @Composable
 fun NumberScreen(
     viewModel: ComposeViewModel = viewModel(),
-    onNumberDetailClicked: () -> Unit = {},
+    onNumberDetailClicked: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val triviaUiState by viewModel.uiState.collectAsState()

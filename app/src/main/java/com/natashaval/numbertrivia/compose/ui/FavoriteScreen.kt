@@ -24,15 +24,22 @@ import com.natashaval.numbertrivia.R
 import com.natashaval.numbertrivia.compose.ui.theme.NumberTriviaTheme
 import com.natashaval.numbertrivia.compose.model.Trivia
 import com.natashaval.numbertrivia.compose.viewmodel.ComposeViewModel
+import com.natashaval.numbertrivia.compose.viewmodel.FavoriteViewModel
 
 @Composable
-fun FavoriteItem(trivia: Trivia, modifier: Modifier = Modifier) {
+fun FavoriteItem(
+    trivia: Trivia,
+    onNumberDetailClicked: (String) -> Unit = {},
+    modifier: Modifier = Modifier
+) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
         TextButton(
-            onClick = {},
+            onClick = {
+                onNumberDetailClicked(trivia.number)
+            },
         ) {
             Text(
                 modifier = Modifier,
@@ -63,26 +70,34 @@ fun FavoriteItemPreview() {
 }
 
 @Composable
-fun FavoriteColumnList(triviaList: List<Trivia>, modifier: Modifier = Modifier) {
+fun FavoriteColumnList(
+    triviaList: List<Trivia>,
+    onNumberDetailClicked: (String) -> Unit = {},
+    modifier: Modifier = Modifier
+) {
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(2.dp),
         contentPadding = PaddingValues(dimensionResource(R.dimen.padding_small))
     ) {
         items(triviaList) { trivia ->
-            FavoriteItem(trivia)
+            FavoriteItem(
+                trivia = trivia,
+                onNumberDetailClicked = onNumberDetailClicked)
         }
     }
 }
 
 @Composable
 fun FavoriteScreen(
-    viewModel: ComposeViewModel = viewModel(),
+    viewModel: FavoriteViewModel = viewModel(),
+    onNumberDetailClicked: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val triviaList = viewModel.favoriteTriviaList.collectAsState()
     FavoriteColumnList(
         triviaList = triviaList.value,
+        onNumberDetailClicked = onNumberDetailClicked,
         modifier = modifier
     )
 }
