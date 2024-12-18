@@ -129,7 +129,7 @@ fun DetailScreen(
             onFavoriteIconClicked = { isFavorite ->
                 // Update the trivia with the new favorite status
                 val updatedTrivia = detailTrivia.copy(isFavorite = isFavorite)
-                viewModel.insertOrUpdate(updatedTrivia, isFavorite)
+                viewModel.insertOrUpdate(updatedTrivia, isFavorite, previousScreen)
             },
         )
         DetailCopySendButton()

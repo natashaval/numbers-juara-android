@@ -272,6 +272,7 @@ fun NumberScreenUI(
 
 @Composable
 fun NumberScreen(
+    previousScreen: String = "",
     viewModel: ComposeViewModel = viewModel(),
     onNumberDetailClicked: (String) -> Unit = {},
     modifier: Modifier = Modifier
@@ -293,7 +294,7 @@ fun NumberScreen(
         onFavoriteIconClicked = { isFavorite ->
             // Update the trivia with the new favorite status
             val updatedTrivia = triviaUiState.copy(isFavorite = isFavorite)
-            viewModel.insertOrUpdate(updatedTrivia, isFavorite)
+            viewModel.insertOrUpdate(updatedTrivia, isFavorite, previousScreen)
         },
         modifier = modifier
     )

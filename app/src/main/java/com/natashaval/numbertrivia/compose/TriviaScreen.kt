@@ -116,6 +116,7 @@ fun NumberTriviaComposeApp(
             composable(route = TriviaScreen.Number.name) { backStackEntry ->
                 val viewModel : ComposeViewModel = hiltViewModel(backStackEntry)
                 NumberScreen(
+                    previousScreen = navController.previousBackStackEntry?.destination?.route.orEmpty(),
                     viewModel = viewModel,
                     onNumberDetailClicked = { number ->
                         // navigate Detail/1/Number

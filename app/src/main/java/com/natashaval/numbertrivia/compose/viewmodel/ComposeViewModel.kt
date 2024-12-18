@@ -2,6 +2,7 @@ package com.natashaval.numbertrivia.compose.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.natashaval.numbertrivia.compose.TriviaScreen
 import com.natashaval.numbertrivia.compose.model.Trivia
 import com.natashaval.numbertrivia.model.NumberData
 import com.natashaval.numbertrivia.repository.NumberRepository
@@ -60,13 +61,18 @@ class ComposeViewModel @Inject constructor(
         }
     }
 
-    fun insertOrUpdate(trivia: Trivia, isFavorite: Boolean) {
+    fun insertOrUpdate(trivia: Trivia, isFavorite: Boolean, previousScreen: String = "") {
         val numberData = trivia.toNumberData(isFavorite)
         viewModelScope.launch {
             numberData?.let { data ->
                 repository.insertOrUpdate(data)
-                _uiState.update { // to handle UI state if Favorite from Number or Number -> Detail
-                    data.toTrivia()
+                if (previousScreen.isEmpty() || previousScreen == TriviaScreen.Number.name) {
+                    // to handle UI state if Favorite from Number (isEmpty) or Number -> Detail
+                    repository.getNumberData(numberData.number).collectLatest { d ->
+                        _uiState.value = d.toTrivia()
+                    }
+
+                    // if only _uiState.update { numberData } -> id = 0 during API call
                 }
             }
         }
