@@ -95,8 +95,8 @@ fun DetailCopySendPreview() {
 
 @Composable
 fun DetailScreen(
-    previousScreen : String = "",
     numberId: String,
+    previousScreen: String,
     viewModel: ComposeViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
@@ -111,7 +111,17 @@ fun DetailScreen(
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
         NumberDescLayout(
-            trivia = if (previousScreen == TriviaScreen.Favorite.name) detailUiState else triviaUiState
+            trivia = when (previousScreen) {
+                TriviaScreen.Favorite.name -> {
+                    detailUiState
+                }
+                TriviaScreen.Number.name -> {
+                    triviaUiState
+                }
+                else -> {
+                    viewModel.initialTrivia
+                }
+            }
         )
         DetailCopySendButton()
     }
@@ -123,6 +133,7 @@ fun DetailScreenPreview() {
     NumberTriviaTheme {
         DetailScreen(
             numberId = "42",
+            previousScreen = TriviaScreen.Number.name,
             modifier = Modifier.fillMaxHeight()
         )
     }

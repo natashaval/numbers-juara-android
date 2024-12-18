@@ -25,7 +25,7 @@ import javax.inject.Inject
 class ComposeViewModel @Inject constructor(
     private val repository: NumberRepository
 ) : ViewModel() {
-    private val initialTrivia = Trivia(
+    val initialTrivia = Trivia(
         number = "42",
         description = "is the answer to the Ultimate Question of Life, the Universe, and Everything."
     )
