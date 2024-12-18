@@ -15,4 +15,6 @@
     <string name="back_button">Back</string>
     <string name="label_number_compose">Number Trivia Compose</string>
     <string name="label_number_detail">Number %s</string>
+    <string name="start_schedule">Start</string>
+    <string name="stop_schedule">Stop</string>
 </resources>

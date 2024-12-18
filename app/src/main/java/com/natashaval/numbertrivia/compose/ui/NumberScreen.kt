@@ -14,6 +14,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Lightbulb
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Replay30
+import androidx.compose.material.icons.filled.Stop
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -187,8 +191,10 @@ fun SelectionLayout(
     typeChip: String,
     onChipChange: (String) -> Unit,
     onGenerateButtonClicked: () -> Unit = {},
+    onScheduleClicked: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var isStop by remember { mutableStateOf(true) }
     Column(
         modifier = modifier
             .imePadding(), // windowSoftInput adjust resize, so button not hidden behind keyboard
@@ -221,6 +227,21 @@ fun SelectionLayout(
             stringRes = R.string.generate,
             onClick = onGenerateButtonClicked,
         )
+        FilledTonalButton(
+            modifier = Modifier.padding(top = 24.dp),
+            onClick = {
+                isStop = !isStop
+                onScheduleClicked(isStop)
+            }
+        ) {
+            Icon(
+                imageVector = if (isStop) Icons.Default.PlayArrow else Icons.Default.Stop,
+                contentDescription = ""
+            )
+            Text(
+                text = stringResource(if (isStop) R.string.start_schedule else R.string.stop_schedule),
+            )
+        }
     }
 }
 
@@ -233,6 +254,7 @@ fun SelectionPreview() {
             onNumberChange = {},
             typeChip = "trivia",
             onChipChange = {},
+            onScheduleClicked = {}
         )
     }
 }
@@ -247,6 +269,7 @@ fun NumberScreenUI(
     onNumberDetailClicked: (String) -> Unit = {},
     onFavoriteIconClicked: (Boolean) -> Unit = {},
     onGenerateButtonClicked: () -> Unit = {},
+    onScheduleClicked: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -265,6 +288,7 @@ fun NumberScreenUI(
             typeChip = typeChip,
             onChipChange = onChipChange,
             onGenerateButtonClicked = onGenerateButtonClicked,
+            onScheduleClicked = onScheduleClicked,
             modifier = Modifier.padding(top = 32.dp)
         )
     }
@@ -296,6 +320,9 @@ fun NumberScreen(
             val updatedTrivia = triviaUiState.copy(isFavorite = isFavorite)
             viewModel.insertOrUpdate(updatedTrivia, isFavorite, previousScreen)
         },
+        onScheduleClicked = { isStop ->
+            viewModel.startOrStopScheduleApiJob(isStop)
+        },
         modifier = modifier
     )
 }
@@ -314,6 +341,7 @@ fun NumberScreenPreview() {
             onNumberChange = {},
             typeChip = "trivia",
             onChipChange = {},
+            onScheduleClicked = {}
         )
     }
 }

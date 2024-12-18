@@ -7,6 +7,11 @@ import com.natashaval.numbertrivia.compose.model.Trivia
 import com.natashaval.numbertrivia.model.NumberData
 import com.natashaval.numbertrivia.repository.NumberRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -35,6 +40,8 @@ class ComposeViewModel @Inject constructor(
 
     private val _detailUiState = MutableStateFlow(initialTrivia)
     val detailUiState = _detailUiState.asStateFlow()
+
+    var scheduleApiJob: Job? = null
 
     init {
         getNumberApi(number = "random", type = "trivia")
@@ -102,5 +109,28 @@ class ComposeViewModel @Inject constructor(
     private fun String.separateNumber(): Pair<String, String> {
         val splitString = this@separateNumber.split(" ", limit = 2)
         return Pair(splitString[0], splitString[1])
+    }
+
+    private fun createScheduleApiJob(): Job {
+        // https://stackoverflow.com/a/66560700
+        return CoroutineScope(Dispatchers.Default).launch {
+            while (true) {
+                getNumberApi(number = "random", type = "trivia")
+                delay(1000 * 10) // delay for 10 seconds
+            }
+        }
+    }
+
+    fun startOrStopScheduleApiJob(isStop: Boolean) {
+        if (isStop) {
+            scheduleApiJob?.cancel(
+                message = "Schedule cancelled"
+            )
+        } else {
+            if (scheduleApiJob == null) {
+                scheduleApiJob = createScheduleApiJob()
+            }
+            scheduleApiJob?.start()
+        }
     }
 }
