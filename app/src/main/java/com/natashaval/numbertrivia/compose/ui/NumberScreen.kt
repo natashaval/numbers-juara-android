@@ -22,7 +22,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,11 +52,17 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun NumberDescLayout(
     trivia: Trivia,
-    onNumberDetailClicked: (String) -> Unit = {},
-    onFavoriteIconClicked: (Boolean) -> Unit = {},
+    onNumberDetailClicked: (String) -> Unit,
+    onFavoriteIconClicked: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // if using derivedStateOf need to copy trivia -> update in room -> ensure that dao update return latest result
+//    val isFavorite by remember { derivedStateOf { trivia.isFavorite } }
     var isFavorite by remember { mutableStateOf(trivia.isFavorite) }
+    // LaunchedEffect ensures isFavorite is updated when trivia changes
+    LaunchedEffect(trivia.isFavorite) {
+        isFavorite = trivia.isFavorite
+    }
     Column(
         modifier = modifier
             .padding(16.dp),
@@ -113,7 +121,9 @@ fun NumberDescLayoutPreview() {
             trivia = Trivia(
                 number = stringResource(R.string.tools_number),
                 description = stringResource(R.string.tools_desc)
-            )
+            ),
+            onNumberDetailClicked = {},
+            onFavoriteIconClicked = {}
         )
     }
 }
@@ -281,7 +291,9 @@ fun NumberScreen(
         },
         onNumberDetailClicked = onNumberDetailClicked,
         onFavoriteIconClicked = { isFavorite ->
-            viewModel.insertOrUpdate(triviaUiState, isFavorite)
+            // Update the trivia with the new favorite status
+            val updatedTrivia = triviaUiState.copy(isFavorite = isFavorite)
+            viewModel.insertOrUpdate(updatedTrivia, isFavorite)
         },
         modifier = modifier
     )

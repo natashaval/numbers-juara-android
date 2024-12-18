@@ -106,22 +106,31 @@ fun DetailScreen(
     if (previousScreen == TriviaScreen.Favorite.name) { // if numberId from FavoriteScreen different from the number from NumberScreen
         viewModel.getNumberData(numberId)
     }
+    val detailTrivia = when (previousScreen) {
+        TriviaScreen.Favorite.name -> {
+            detailUiState
+        }
+
+        TriviaScreen.Number.name -> {
+            triviaUiState
+        }
+
+        else -> {
+            viewModel.initialTrivia
+        }
+    }
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
         NumberDescLayout(
-            trivia = when (previousScreen) {
-                TriviaScreen.Favorite.name -> {
-                    detailUiState
-                }
-                TriviaScreen.Number.name -> {
-                    triviaUiState
-                }
-                else -> {
-                    viewModel.initialTrivia
-                }
-            }
+            trivia = detailTrivia,
+            onNumberDetailClicked = {},
+            onFavoriteIconClicked = { isFavorite ->
+                // Update the trivia with the new favorite status
+                val updatedTrivia = detailTrivia.copy(isFavorite = isFavorite)
+                viewModel.insertOrUpdate(updatedTrivia, isFavorite)
+            },
         )
         DetailCopySendButton()
     }

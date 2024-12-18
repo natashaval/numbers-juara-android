@@ -45,7 +45,7 @@ class ComposeViewModel @Inject constructor(
             val result = repository.getNumberApi(numberInput, type)
             val (num, desc) = result.separateNumber()
             _uiState.update {
-                Trivia(num, desc)
+                Trivia(number = num, description = desc)
             }
         }
     }
@@ -63,8 +63,11 @@ class ComposeViewModel @Inject constructor(
     fun insertOrUpdate(trivia: Trivia, isFavorite: Boolean) {
         val numberData = trivia.toNumberData(isFavorite)
         viewModelScope.launch {
-            numberData?.let {
-                repository.insertOrUpdate(numberData)
+            numberData?.let { data ->
+                repository.insertOrUpdate(data)
+                _uiState.update { // to handle UI state if Favorite from Number or Number -> Detail
+                    data.toTrivia()
+                }
             }
         }
     }
@@ -72,6 +75,7 @@ class ComposeViewModel @Inject constructor(
     private fun Trivia.toNumberData(isFavorite: Boolean): NumberData? {
         try {
             return NumberData(
+                id = this.id,
                 number = this.number.toLong(),
                 description = this.description,
                 isFavorite = isFavorite
@@ -83,6 +87,7 @@ class ComposeViewModel @Inject constructor(
     }
 
     private fun NumberData.toTrivia() = Trivia(
+        id = this.id,
         number = this.number.toString(),
         description = this.description,
         isFavorite = this.isFavorite
